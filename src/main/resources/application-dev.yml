@@ -14,22 +14,40 @@ spring:
       hibernate:
         format_sql: true
 
-  # OpenAI configuration
   ai:
-    openai:
-      api-key: ${OPENAI_API_KEY:demo-key}
+    model:
+      chat: ollama
+      embedding: ollama
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
       chat:
-        model: ${OPENAI_CHAT_MODEL:gpt-40-mini}
-        temperature: 0.2
+        options:
+          model: ${OLLAMA_CHAT_MODEL:qwen2.5vl:3b}
+          temperature: 0.2
       embedding:
-        model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
+        options:
+          model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
+
+    # OpenAI configuration (kept for switching back)
+    # openai:
+    #   api-key: ${OPENAI_API_KEY:demo-key}
+    #   chat:
+    #     model: ${OPENAI_CHAT_MODEL:gpt-40-mini}
+    #     temperature: 0.2
+    #   embedding:
+    #     model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
 
     vectorstore:
       pgvector:
         index-type: HNSW
         distance-type: COSINE_DISTANCE
-        dimension: 1536
-        table-name: vector_store
+        dimension: 768
+        table-name: vector_store_ollama
         schema-name: public
         initialize-schema: true
 
